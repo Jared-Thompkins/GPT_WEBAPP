@@ -2,7 +2,7 @@ async function getGptResponse() {
   const firstPart = document.getElementById('firstPart').value;
   const animal = document.getElementById('animal').value;
 
-  document.getElementById('chatLog').innerHTML += 'You: ' + firstPart + ' ' + animal + '<br>';
+  document.getElementById('chatLog').innerHTML += 'You: ' + animal + '<br>';
 
   const response = await fetch('/', {
     method: 'POST',
