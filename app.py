@@ -10,13 +10,16 @@ openai.api_key = os.getenv('OPENAI_KEY')
 @app.route("/", methods=("GET", "POST"))
 def index():
     if request.method == "POST":
+        firstPart = request.form["firstPart"]
         animal = request.form["animal"]
+
+        system_message = firstPart if firstPart else "You are a helpful assistant."
 
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
-                {"role": "user", "content": generate_prompt(animal)}
+                {"role": "system", "content": system_message},
+                {"role": "user", "content": generate_prompt(firstPart, animal)}
             ]
         )
         
@@ -28,8 +31,8 @@ def index():
     return render_template("index.html", result=result)
 
 
-def generate_prompt(animal):
-    return f"""Suggest three names for a {animal.capitalize()} superhero."""
+def generate_prompt(firstPart, animal):
+    return f"{animal.capitalize()}"
 
 if __name__ == "__main__":
     app.run(port=5000)
