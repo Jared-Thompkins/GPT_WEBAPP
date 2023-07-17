@@ -10,16 +10,22 @@
 
 
 <body>
+    <nav>
+        <a href="{{ url_for('index') }}">Home</a>
+        {% if current_user.is_authenticated %}
+            <a href="{{ url_for('logout') }}">Logout</a>
+        {% else %}
+            <a href="{{ url_for('login') }}">Login</a>
+        {% endif %}
+    </nav>
 
     <h2>Chat with GPT</h2>
 
     <input type="text" id="firstPart" placeholder="Give the model a role">
     <input type="text" id="animal" placeholder="Send a message">
     <button onclick="getGptResponse()">Send</button>
-    
 
     <div id="chatLog"></div>
-
 
 
 </body>
