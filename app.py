@@ -22,6 +22,18 @@ mongodb_uri = os.getenv("MONGODB_URI")
 client = MongoClient(mongodb_uri)
 db = client["MainAppDB"]
 
+
+# Tester 
+
+try:
+    # The ismaster command is cheap and does not require auth.
+    client.admin.command('ismaster')
+    print("MongoDB connection successful")
+except Exception as e:
+    print("MongoDB connection unsuccessful", e)
+
+#Tester ^
+
 def get_user(username):
     user_collection = db["users"]
     user = user_collection.find_one({"username": username})
