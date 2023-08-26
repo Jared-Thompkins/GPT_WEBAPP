@@ -8,6 +8,8 @@ from models import User
 from flask_login import LoginManager, login_user, logout_user
 from forms import LoginForm
 from pymongo import MongoClient
+from pymongo.mongo_client import MongoClient
+from pymongo.server_api import ServerApi
 import os
 import openai
 
@@ -19,15 +21,14 @@ openai.api_key = os.getenv('OPENAI_KEY')
 #MongoDB setup
 mongodb_uri = os.getenv("MONGODB_URI")
 
-client = MongoClient(mongodb_uri)
-db = client["MainAppDB"]
+client = MongoClient(mongodb_uri, server_api=ServerApi('1'))
+db = client["cluster21"]
 
 
 # Tester 
 
 try:
-    # The ismaster command is cheap and does not require auth.
-    client.admin.command('ismaster')
+    client.admin.command('ping')
     print("MongoDB connection successful")
 except Exception as e:
     print("MongoDB connection unsuccessful", e)
