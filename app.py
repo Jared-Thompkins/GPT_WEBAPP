@@ -6,23 +6,20 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
 from models import User
 from flask_login import LoginManager, login_user, logout_user
-from forms import LoginForm
+from forms import LoginForm, RegistrationForm
 from pymongo import MongoClient
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 import os
 import openai
+from extensions import client, db
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 load_dotenv()
 openai.api_key = os.getenv('OPENAI_KEY')
 
-#MongoDB setup
-mongodb_uri = os.getenv("MONGODB_URI")
 
-client = MongoClient(mongodb_uri, server_api=ServerApi('1'))
-db = client["cluster21"]
 
 
 # Tester 
@@ -44,10 +41,19 @@ def get_user(username):
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        hashed_password = generate_password_hash(form.password.data, method='sha256')
-        user_collection = db["users"]
-        user_collection.insert_one({"username": form.username.data, "password": hashed_password})
-        flash('You have successfully registered!', 'success')
+        # Check if user already exists
+        existing_user = User.get_by_username(form.username.data)
+        if existing_user:
+            flash('Username already exists. Please choose a different one.')
+            return redirect(url_for('register'))
+
+        # Create a new user
+        new_user = User(id=None, username=form.username.data, password=form.password.data)
+
+        # Save the user to MongoDB
+        new_user.save()
+
+        flash('Registration successful. You can now log in.')
         return redirect(url_for('login'))
     return render_template('register.html', form=form)
 
