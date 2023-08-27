@@ -19,9 +19,6 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 load_dotenv()
 openai.api_key = os.getenv('OPENAI_KEY')
 
-
-
-
 # Tester 
 
 try:
@@ -71,22 +68,24 @@ login_manager.init_app(app)
 def load_user(user_id):
     # Here is where we write the code to get the user from MongoDB using user_id
     # For now, it just returns a user with the provided id
-    return User(user_id)
+    return User.get_by_id(user_id)
 
 # Routes
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
-        user = get_user(form.username.data)
-        if user is not None and check_password_hash(user["password"], form.password.data): 
-            user_obj = User(user["username"])
-            login_user(user_obj)
-            flash('You have successfully logged in.', 'success')
+        user = User.get_by_username(form.username.data)
+        
+        if user and user.password == form.password.data:
+            login_user(user)
+            flash('Login successful.')
             return redirect(url_for('index'))
+
         else:
-            flash('Login Unsuccessful. Please check username and password', 'danger')
+            flash('Login unsuccessful. Please check username and password.')
     return render_template('login.html', form=form)
+
 
 @app.route("/logout")
 def logout():
