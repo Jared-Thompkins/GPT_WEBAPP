@@ -17,6 +17,7 @@
         {% else %}
             <a href="{{ url_for('login') }}">Login</a>
         {% endif %}
+        <p>Current User Authenticated: {{ current_user.is_authenticated }}</p>
     </nav>
 
     <h2>Chat with GPT</h2>

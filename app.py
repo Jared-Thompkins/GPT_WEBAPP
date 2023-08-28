@@ -1,11 +1,11 @@
-from flask import Flask, redirect, render_template, request, url_for, flash
+from flask import Flask, redirect, render_template, request, url_for, flash, session
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, Length, EqualTo
 from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
 from models import User
-from flask_login import LoginManager, login_user, logout_user
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from forms import LoginForm, RegistrationForm
 from pymongo import MongoClient
 from pymongo.mongo_client import MongoClient
@@ -66,9 +66,9 @@ login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(user_id):
-    # Here is where we write the code to get the user from MongoDB using user_id
-    # For now, it just returns a user with the provided id
-    return User.get_by_id(user_id)
+    temp_id = session.get("_user_id")
+    user = User.get_by_id(temp_id)
+    return user
 
 # Routes
 @app.route("/login", methods=['GET', 'POST'])
@@ -88,6 +88,7 @@ def login():
 
 
 @app.route("/logout")
+@login_required
 def logout():
     logout_user()
     flash('You have successfully logged out.', 'success')
