@@ -6,16 +6,18 @@ This project is a web-based application that integrates GPT-3.5 Turbo, a convers
 The backend is responsible for user authentication, session management, and interfacing with the GPT API, while the frontend focuses on providing a seamless user experience. State management on the client side is handled using React's built-in useState and useContext hooks.
 
 ## Features
-User Authentication: Secure registration and login functionality.
-Interactive UI: A text-based interface for user prompts and GPT-3 responses.
-Backend API: Flask-based API for handling GPT-3 calls and user management.
-State Management: Uses React's built-in state management for user data.
+
+- **User Authentication**: Secure registration and login functionality.
+- **Interactive UI**: A text-based interface for user prompts and GPT-3.5 Turbo responses.
+- **Backend API**: Flask-based API for handling GPT-3.5 Turbo calls and user management.
+- **State Management**: Uses React's built-in state management for user data.
 
 ## Technologies Used
-Frontend: React.js
-Backend: Flask
-Database: MongoDB
-Other: Flask-WTF for forms, Flask-Login for session management, OpenAI for GPT-3.5 Turbo API.
+
+- **Frontend**: React.js
+- **Backend**: Flask
+- **Database**: MongoDB
+- **Other**: Flask-WTF for forms, Flask-Login for session management, OpenAI for GPT-3.5 Turbo API.
 
 ## Roadmap
 
